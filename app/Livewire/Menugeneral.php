@@ -60,7 +60,7 @@ class Menugeneral extends Component
         [
             'name' => 'Registrar',
             'icon' => 'fas fa-user-plus',
-            'route' => 'inicio',
+            'route' => 'register',
             'keywords' => ['registrar', 'registro', 'crear', 'cuenta']
         ],
         [
