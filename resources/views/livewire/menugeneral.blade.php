@@ -32,20 +32,19 @@
     </style>
     <div class="relative">
         <!-- Header Navigation -->
-        <nav class="bg-gradient-to-r from-gray-800 via-emerald-600 to-emerald-500 shadow-lg">
+        <nav class="bg-gradient-to-r from-gray-700 via-emerald-600 to-emerald-500 shadow-lg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
 
                     <!-- Logo -->
                     <div class="flex-shrink-0 flex items-center">
-                        <a href="/" class="text-2xl font-bold">
+                        <a href="/" class="text-2xl font-bold hover:text-yellow-500">
                             <span class="text-primary">Reserv</span><span class="text-pearl-100">Áncash</span>
                         </a>
                     </div>
 
                     <!-- Desktop Navigation -->
                     <div class="hidden lg:flex items-center space-x-8">
-
                         {{-- <!-- Search Bar -->
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -69,7 +68,6 @@
                                 </div>
                             @endif
                         </div> --}}
-
                         <!-- Navigation Links -->
                         <div class="flex items-center space-x-6">
                             @foreach ($menuItems as $item)
@@ -86,7 +84,7 @@
                     <div class="lg:hidden">
                         <button wire:click="toggleMenu"
                             class="text-3xl font-bold transition-all duration-300 hover:scale-110 focus:outline-none">
-                            <span class="text-purple-300">R</span><span class="text-pearl-100">A</span>
+                            <span class="text-black hover:text-yellow-500">R</span><span class="text-pearl-100">A</span>
                         </button>
                     </div>
                 </div>
@@ -94,25 +92,25 @@
         </nav>
 
         <!-- Mobile Sidebar Overlay -->
-        {{-- @if ($isOpen)
+        @if ($isOpen)
             <div class="fixed inset-0 z-50 lg:hidden">
                 <!-- Backdrop -->
                 <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" wire:click="closeMenu"></div>
-
                 <!-- Sidebar -->
                 <div
-                    class="relative flex flex-col w-80 max-w-xs bg-gradient-to-b from-purple-700 via-purple-800 to-emerald-600 shadow-xl transform transition-transform duration-300 ease-in-out h-full">
-
+                    class="relative flex flex-col w-80 max-w-xs 
+                    {{-- bg-gradient-to-b from-purple-700 via-purple-800 to-emerald-600 --}}
+                    bg-gradient-to-r from-gray-800 via-emerald-600 to-emerald-500
+                    shadow-xl transform transition-transform duration-300 ease-in-out h-full">
                     <!-- Header -->
                     <div class="flex items-center justify-between p-6 border-b border-white/20">
                         <h2 class="text-xl font-bold">
-                            <span class="text-purple-300">Reserv</span><span class="text-pearl-100">ancash</span>
+                            <span class="text-black hover:text-yellow-500">Reserv</span><span class="text-pearl-100">Áncash</span>
                         </h2>
                         <button wire:click="closeMenu" class="text-white hover:text-emerald-300 transition-colors">
                             <i class="fas fa-times text-xl"></i>
                         </button>
                     </div>
-
                     <!-- Mobile Search -->
                     <div class="p-4 border-b border-white/20">
                         <div class="relative">
@@ -123,17 +121,15 @@
                                 class="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent">
                         </div>
                     </div>
-
                     <!-- Navigation Items -->
                     <div class="flex-1 overflow-y-auto">
                         <nav class="p-4 space-y-2">
                             @php
                                 $itemsToShow = !empty($searchTerm) ? $filteredItems : $menuItems;
                             @endphp
-
                             @forelse($itemsToShow as $item)
                                 <a href="{{ route($item['route']) }}" wire:click="closeMenu"
-                                    class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-all duration-300 hover:translate-x-2 group">
+                                    class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-all duration-300 hover:translate-x-2 group hover:text-yellow-500">
                                     <i
                                         class="{{ $item['icon'] }} text-emerald-300 mr-4 group-hover:scale-110 transition-transform"></i>
                                     <span class="font-medium">{{ $item['name'] }}</span>
@@ -150,7 +146,6 @@
                             @endforelse
                         </nav>
                     </div>
-
                     <!-- Footer -->
                     <div class="p-4 border-t border-white/20">
                         <div class="text-center text-white/70 text-sm">
@@ -160,7 +155,7 @@
                     </div>
                 </div>
             </div>
-        @endif --}}
-        
+        @endif
+
     </div>
 </div>

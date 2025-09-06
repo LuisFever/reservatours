@@ -1,24 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 [x-cloak] {
     display: none;
-}
-
-
-/* Color esmeralda claro color de texto */
-
-@layer components {
-    .text-primary {
-        color: #06D6A0;
-    }
-}
-
-
-/* Color esmeralda claro color de fondo */
-
-@layer components {
-    .bg-primary {
-        background-color: #06D6A0;
-    }
 }

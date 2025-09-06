@@ -8,7 +8,6 @@ class Login extends Component
 {
     public function render()
     {
-        return view('livewire.auth.login')
-            ->layout('layouts.app'); // o layouts.auth si quieres uno exclusivo
+        return view('livewire.auth.login')->layout('layouts.app'); // o layouts.auth si quieres uno exclusivo
     }
 }

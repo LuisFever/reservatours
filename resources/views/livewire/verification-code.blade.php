@@ -49,7 +49,7 @@
                 Hola, somos ReservÁncash. <br /> Te damos la bienvenida, ya eres parte de nosotros.
             </h3>
             <div style="margin: 30px 50% 30px">
-                <img src="{{ asset('Sin titulo.png') }}" alt="Logo" class="w-24 h-24 mb-4 rounded-full shadow" />
+                <img src="{{ asset('Sin título.png') }}" alt="Logo" class="w-24 h-24 mb-4 rounded-full shadow" />
             </div>
             <p style="margin: 10px 20px 26px">Tu código es:</p>
             <div style="text-align: center; margin: 16px 0 20px">
