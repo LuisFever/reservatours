@@ -12,7 +12,7 @@ class Empresas extends Model
     protected $table = 'empresas';
 
     protected $fillable = [
-        'razonsocial','ruc','direccion','telefono','logo'
+        'nameempresa','razonsocial','ruc','direccion','telefono','logo'
     ];
 
     public function reprelegal()

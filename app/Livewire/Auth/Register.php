@@ -86,7 +86,14 @@ class Register extends Component
             $this->nameempresa = $dataruc['razon_social'] ?? '';
             $this->razonsocial = $dataruc['razon_social'] ?? '';
             $this->direccion = $dataruc['direccion'] ?? '';
-            session()->flash('message', '✅ RUC válido, datos encontrados.');
+            $this->dispatch('mostrar-notificacion_ruc', [
+                'message' => '✅ RUC válido, datos encontrados.',
+                'type' => 'success',
+            ]);
+            // Dispara el evento para hacer foco
+            $this->dispatch('hacer-foco', [
+                'element' => 'telefono_empresa',
+            ]);
         } else {
             $this->reset(['nameempresa', 'razonsocial', 'direccion']);
             $this->addError('ruc', '❌ No se encontraron datos.');
@@ -116,6 +123,7 @@ class Register extends Component
                 ]);
             } elseif ($this->userType === 'company') {
                 $rules = array_merge($rules, [
+                    'nameempresa' => ['required', 'string', 'max:255'],
                     'ruc' => ['required', 'string', 'max:11', 'unique:empresas,ruc'],
                     'razonsocial' => ['required', 'string', 'max:255'],
                     'direccion' => ['nullable', 'string'],
@@ -148,12 +156,14 @@ class Register extends Component
 
                 $this->createUser($this->email, $this->password, $persona->id, null, $tipoUsuario->id);
                 \Log::info('Usuario cliente creado con email: ' . $this->email);
+                
             } elseif ($this->userType === 'company') {
                 // Guardar logo (si existe)
                 $logoPath = $this->logo_empresa ? $this->logo_empresa->store('logos', 'public') : null;
 
                 // Crear empresa
                 $empresa = Empresas::create([
+                    'nameempresa' => $this->nameempresa,
                     'razonsocial' => $this->razonsocial,
                     'ruc' => $this->ruc,
                     'direccion' => $this->direccion,

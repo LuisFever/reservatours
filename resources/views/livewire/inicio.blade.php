@@ -1,4 +1,4 @@
-<div class="bg-purple-200">
+<div class="bg-emerald-100">
     <!-- Hero Section con imagen de fondo -->
     <div class="relative bg-cover bg-center h-96" style="background-image: url('RA.png')">
         <div class="absolute inset-0 bg-black opacity-50"></div>
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Buscador de servicios turísticos -->
-    <div class="bg-purple-300 py-6 shadow-md mb-16">
+    <div class="bg-emerald-200 py-6 shadow-md mb-16">
         <div class="container mx-auto px-6">
             <form class="flex flex-col md:flex-row gap-4">
                 <!-- Option Destinos -->
@@ -98,7 +98,7 @@
     </div>
 
     <!-- Sección de paquetes destacados -->
-    <div id="servicios" class="py-10 bg-purple-200 mb-16">
+    <div id="servicios" class="py-10 bg-emerald-100 mb-16">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-8">Paquetes destacados</h2>
             <!-- Contenedor de los N paquetes -->
@@ -160,7 +160,7 @@
     </div>
 
     <!-- Sección de promociones destacados -->
-    <div id="servicios" class="py-10 bg-purple-200 mb-16">
+    <div id="servicios" class="py-10 bg-emerald-100 mb-16">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-8">Promociones destacados</h2>
             <!-- Contenedor de las N promociones -->
@@ -246,7 +246,7 @@
     </div>
 
     <!-- Sección de empresas de turismo -->
-    <div class="py-10 bg-purple-200 mb-16">
+    <div class="py-10 bg-emerald-100 mb-16">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-8">Nuestras Empresas</h2>
             <!-- Contenedor de las empresas disponibles -->
@@ -284,7 +284,7 @@
     </div>
 
     <!-- Sección de itinerarios populares -->
-    <div class="py-10 bg-purple-200 mb-16">
+    <div class="py-10 bg-emerald-100 mb-16">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-8">Itinerarios populares</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -363,7 +363,7 @@
     </div-->
 
     <!-- Sección de reseñas populares -->
-    <div class="py-10 bg-purple-200 mb-16">
+    <div class="py-10 bg-emerald-100 mb-16">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-8">Reseñas Populares</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">

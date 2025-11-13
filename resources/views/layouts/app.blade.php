@@ -20,13 +20,41 @@
 
     <!-- Styles -->
     @livewireStyles
+
+
+    @if (session('success'))
+    <div 
+        x-data="{ show: true }" 
+        x-show="show" 
+        x-init="setTimeout(() => show = false, 3000)" 
+        class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 text-center">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('warning'))
+    <div 
+        x-data="{ show: true }" 
+        x-show="show" 
+        x-init="setTimeout(() => show = false, 4000)" 
+        class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-6 py-3 rounded-lg shadow-lg z-50 text-center">
+        {{ session('warning') }}
+    </div>
+@endif
+
+
+
 </head>
 
 <body class="min-h-screen">
     {{-- Wrapper principal que garantiza que el contenido esté visible. --}}
     <div class="min-h-screen flex flex-col">
         <!-- Page Heading -->
-        @livewire('menugeneral')
+        @if(Auth::check())
+            @livewire('navigationmenu')
+        @else
+            @livewire('menugeneral')
+        @endif
 
         {{-- Contenido principal --}}
         <main class="font-sans text-gray-900 antialiased flex-1">

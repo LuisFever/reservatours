@@ -17,6 +17,29 @@
             animation: fadeIn 0.4s ease-out forwards;
         }
     </style>
+    {{-- Componente de Notificación --}}
+    <div x-data="{ show: false, message: '', type: 'success' }" x-show="show" x-init="@this.on('mostrar-notificacion_ruc', (event) => {
+        message = event[0].message;
+        type = event[0].type;
+        show = true;
+        setTimeout(() => { show = false }, 2000); // 2 segundos
+    });
+    
+    @this.on('hacer-foco', (event) => {
+        document.getElementById(event[0].element).focus(); // Hacer foco en el elemento especificado
+    });"
+        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 p-4 rounded-lg shadow-lg text-white transition-all duration-300"
+        :class="{
+            'bg-green-500': type === 'success',
+            'bg-red-500': type === 'error'
+        }"
+        style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        <span x-text="message"></span>
+    </div>
+
+    {{-- Contenedor principal --}}
     <div class="font-sans antialiased text-gray-800 bg-gray-50 min-h-screen leading-relaxed">
 
         {{-- @if (session('success'))
@@ -142,9 +165,9 @@
                                             </span>
                                             <input
                                                 class="w-full px-4 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0"
-                                                type="text" id="dni" name="dni"
-                                                maxlength="8" required wire:model="dni"
-                                                wire:keydown.enter="buscarDni" placeholder="Ingrese DNI y Enter">
+                                                type="text" id="dni" name="dni" maxlength="8" required
+                                                wire:model="dni" wire:keydown.enter="buscarDni"
+                                                placeholder="Ingrese DNI y Enter">
                                             @error('dni')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
@@ -214,7 +237,7 @@
                                                 </span>
                                                 <input
                                                     class="w-full px-4 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0"
-                                                    type="text" id="nomeempresa" name="nameempresa"
+                                                    type="text" id="nameempresa" name="nameempresa"
                                                     wire:model="nameempresa">
                                             </div>
                                         </div>
@@ -261,7 +284,7 @@
                                                 <input
                                                     class="w-full px-4 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0"
                                                     type="text" id="direccion" name="direccion"
-                                                    wire:model="direccion">
+                                                    wire:model="direccion" readonly>
                                             </div>
                                         </div>
                                         <div class="mb-4 md:mb-0">
@@ -305,7 +328,8 @@
                                                 for="doc_type_representante">Tipo de Documento</label>
                                             <select
                                                 class="w-full px-4 py-2 text-sm bg-white border border-gray-300 rounded-md text-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
-                                                id="doc_type_representante" name="doc_type_representante" wire:model="doc_type_representante">
+                                                id="doc_type_representante" name="doc_type_representante"
+                                                wire:model="doc_type_representante">
                                                 <option value="dni">DNI</option>
                                             </select>
                                         </div>
@@ -319,9 +343,9 @@
                                                 </span>
                                                 <input
                                                     class="w-full px-4 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0"
-                                                    type="text" id="dni" name="dni"
-                                                    maxlength="8" wire:model="dni"
-                                                    wire:keydown.enter="buscarDni" placeholder="Ingrese DNI y Enter">
+                                                    type="text" id="dni" name="dni" maxlength="8"
+                                                    wire:model="dni" wire:keydown.enter="buscarDni"
+                                                    placeholder="Ingrese DNI y Enter">
                                             </div>
                                         </div>
                                         <div class="mb-4 md:mb-0">
@@ -335,7 +359,7 @@
                                                 <input
                                                     class="w-full px-4 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0"
                                                     type="text" id="nombres" name="nombres"
-                                                    wire:model="nombres" readonly>
+                                                    wire:model="nombres">
                                             </div>
                                         </div>
                                         <div class="mb-4 md:mb-0">
@@ -348,9 +372,8 @@
                                                 </span>
                                                 <input
                                                     class="w-full px-4 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0"
-                                                    type="text" id="apellidos"
-                                                    name="apellidos"
-                                                    wire:model="apellidos" readonly>
+                                                    type="text" id="apellidos" name="apellidos"
+                                                    wire:model="apellidos">
                                             </div>
                                         </div>
                                     </div>

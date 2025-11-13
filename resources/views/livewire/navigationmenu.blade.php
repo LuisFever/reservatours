@@ -8,57 +8,58 @@
                     </a>
                 </div> --}}
                 <div class="flex-shrink-0 items-center">
-                    <a href="{{ route('inicio') }}" class="text-2xl font-extrabold tracking-wide hover:text-white text-2xl font-bold">
+                    <a href="{{ route('inicio') }}"
+                        class="text-2xl font-extrabold tracking-wide hover:text-white text-2xl font-bold">
                         <span class="text-primary">Reserv</span><span class="text-yellow-100">Áncash</span>
                     </a>
                 </div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if (session('user_type') == 'cliente')
+                <div class=" space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    @if ($userType == 'cliente')
                         {{-- Menú para Cliente --}}
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard.cliente') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('dashboard.cliente')">
                             {{ __('Mi Dashboard') }}
                         </x-nav-link>
 
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('destinos') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('destinos')">
                             {{ __('Destinos') }}
                         </x-nav-link>
 
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('servicios') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('servicios')">
                             {{ __('Servicios') }}
                         </x-nav-link>
 
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('reservas.mis_reservas') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('reservas.mis_reservas')">
                             {{ __('Mis Reservas') }}
                         </x-nav-link>
 
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('empresas') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('empresas')">
                             {{ __('Empresas') }}
                         </x-nav-link>
-                    @elseif(session('user_type') == 'empresa')
+                    @elseif ($userType == 'empresa')
                         {{-- Menú para Empresa --}}
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard.empresa') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('dashboard.empresa')">
                             {{ __('Mi Dashboard') }}
                         </x-nav-link>
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('servicios.mis_servicios') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('servicios.mis_servicios')">
                             {{ __('Mis Servicios') }}
                         </x-nav-link>
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('equipos.mis_equipos') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('equipos.mis_equipos')">
                             {{ __('Mis Equipos') }}
                         </x-nav-link>
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('reservas.empresa') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('reservas.empresa')">
                             {{ __('Reservas') }}
                         </x-nav-link>
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('paquetes') }}"
+                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
                             :active="request()->routeIs('paquetes')">
                             {{ __('Paquetes') }}
                         </x-nav-link>
@@ -95,11 +96,11 @@
                                     <div class="block px-4 py-2 text-xs text-gray-400">
                                         {{ __('Manage Team') }}
                                     </div>
-                                    <x-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}">
+                                    <x-dropdown-link href="{{ route('dashboard', Auth::user()->currentTeam->id) }}">
                                         {{ __('Team Settings') }}
                                     </x-dropdown-link>
                                     @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                        <x-dropdown-link href="{{ route('teams.create') }}">
+                                        <x-dropdown-link href="{{ route('dashboard') }}">
                                             {{ __('Create New Team') }}
                                         </x-dropdown-link>
                                     @endcan
@@ -119,55 +120,59 @@
                     </div>
                 @endif
 
+
+                <!-- Boton Usuario -->
                 @auth
                     <div class="ms-3 relative">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
-                                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                    <button
-                                        class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                                <button
+                                    class="flex items-center text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+
+                                    {{-- Logo o foto --}}
+                                    @if (Auth::user()->display_logo)
                                         <img class="size-8 rounded-full object-cover"
-                                            src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
-                                    </button>
-                                @else
-                                    <span class="inline-flex rounded-md">
-                                        <button type="button"
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                            {{ Auth::user()->name }}
-                                            @if (session('user_type'))
-                                                <span class="ms-1 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                                                    {{ ucfirst(session('user_type')) }}
-                                                </span>
-                                            @endif
-                                            <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                            </svg>
-                                        </button>
+                                            src="{{ Auth::user()->display_logo }}"
+                                            alt="{{ Auth::user()->display_name }}" />
+                                    @else
+                                        {{-- Ícono de usuario genérico con Font Awesome --}}
+                                        <div class="size-8 flex items-center justify-center bg-gray-200 rounded-full">
+                                            <i class="fa-solid fa-user text-gray-500 text-lg"></i>
+                                        </div>
+                                    @endif
+
+                                    {{-- Nombre --}}
+                                    <span class="ml-2 text-gray-700 font-semibold truncate max-w-[150px]">
+                                        {{ Auth::user()->display_name }}
                                     </span>
-                                @endif
+                                </button>
                             </x-slot>
 
                             <x-slot name="content">
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     {{ __('Manage Account') }}
-                                    @if (session('user_type'))
-                                        <div class="text-blue-600 font-semibold">{{ ucfirst(session('user_type')) }}</div>
+                                    @if ($userType)
+                                        <div class="text-blue-600 font-semibold">{{ ucfirst($userType) }}</div>
                                     @endif
                                 </div>
-                                <x-dropdown-link href="{{ route('profile.show') }}">
+
+                                <x-dropdown-link href="{{ route('dashboard') }}">
+                                    <i class="fa-solid fa-id-card mr-2 text-gray-500"></i>
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
+
                                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                     <x-dropdown-link href="{{ route('api-tokens.index') }}">
+                                        <i class="fa-solid fa-key mr-2 text-gray-500"></i>
                                         {{ __('API Tokens') }}
                                     </x-dropdown-link>
                                 @endif
+
                                 <div class="border-t border-gray-200"></div>
                                 <form method="POST" action="{{ route('logout') }}" x-data>
                                     @csrf
                                     <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                                        <i class="fa-solid fa-right-from-bracket mr-2 text-red-500"></i>
                                         {{ __('Log Out') }}
                                     </x-dropdown-link>
                                 </form>
@@ -176,14 +181,18 @@
                     </div>
                 @else
                     <a href="{{ route('login') }}" class="text-white font-bold text-lg">
+                        <i class="fa-solid fa-right-to-bracket mr-1"></i>
                         {{ __('Log in') }}
                     </a>
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="ms-4 text-white font-bold text-lg">
+                            <i class="fa-solid fa-user-plus mr-1"></i>
                             {{ __('Register') }}
                         </a>
                     @endif
                 @endauth
+
+
             </div>
 
             <div class="-me-2 flex items-center sm:hidden">
@@ -203,38 +212,38 @@
 
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            @if (session('user_type') == 'cliente')
+            @if ($userType == 'cliente')
                 {{-- Menú móvil para Cliente --}}
                 <x-responsive-nav-link href="{{ route('dashboard.cliente') }}" :active="request()->routeIs('dashboard.cliente')">
                     {{ __('Mi Dashboard') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('destinos') }}" :active="request()->routeIs('destinos')">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('destinos')">
                     {{ __('Destinos') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('servicios') }}" :active="request()->routeIs('servicios')">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('servicios')">
                     {{ __('Servicios') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('reservas.mis_reservas') }}" :active="request()->routeIs('reservas.mis_reservas')">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('reservas.mis_reservas')">
                     {{ __('Mis Reservas') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('empresas') }}" :active="request()->routeIs('empresas')">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('empresas')">
                     {{ __('Empresas') }}
                 </x-responsive-nav-link>
-            @elseif(session('user_type') == 'empresa')
+            @elseif ($userType == 'empresa')
                 {{-- Menú móvil para Empresa --}}
                 <x-responsive-nav-link href="{{ route('dashboard.empresa') }}" :active="request()->routeIs('dashboard.empresa')">
                     {{ __('Mi Dashboard') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('servicios.mis_servicios') }}" :active="request()->routeIs('servicios.mis_servicios')">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('servicios.mis_servicios')">
                     {{ __('Mis Servicios') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('equipos.mis_equipos') }}" :active="request()->routeIs('equipos.mis_equipos')">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('equipos.mis_equipos')">
                     {{ __('Mis Equipos') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('reservas.empresa') }}" :active="request()->routeIs('reservas.empresa')">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('reservas.empresa')">
                     {{ __('Reservas') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('paquetes') }}" :active="request()->routeIs('paquetes')">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('paquetes')">
                     {{ __('Paquetes') }}
                 </x-responsive-nav-link>
             @else
@@ -259,8 +268,8 @@
                         </div>
                         <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
 
-                        @if (session('user_type'))
-                            <div class="text-xs text-blue-600 font-semibold">{{ ucfirst(session('user_type')) }}</div>
+                        @if ($userType)
+                            <div class="text-xs text-blue-600 font-semibold">{{ ucfirst($userType) }}</div>
                         @endif
                     </div>
                 </div>

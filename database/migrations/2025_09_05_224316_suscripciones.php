@@ -11,40 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // SIN OPCION GRATUITA
-        // Schema::create('suscripciones', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->enum('plan', ['mensual', 'anual']);
-        //     $table->date('fecha_inicio');
-        //     $table->date('fecha_fin');
-        //     $table->boolean('activo')->default(true);
-        //     $table->unsignedBigInteger('fk_idusuario');
-        //     $table->timestamps();
-
-        //     $table->foreign('fk_idusuario')->references('id')->on('usuarios')->onDelete('cascade');
-        // });
-        // Schema::create('suscripciones', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->unsignedBigInteger('usuario_id');
-        //     $table->unsignedBigInteger('plan_id');
-        //     $table->date('fecha_inicio');
-        //     $table->date('fecha_fin')->nullable(); // null = ilimitado
-        //     $table->boolean('activa')->default(true);
-        //     $table->timestamps();
-
-        //     $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
-        //     $table->foreign('plan_id')->references('id')->on('planes')->onDelete('cascade');
-        // });
         Schema::create('suscripciones', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('usuario_id');
             $table->enum('plan', ['gratis', 'mensual', 'anual']);
             $table->date('fecha_inicio')->default(now());
             $table->date('fecha_fin')->nullable();
             $table->boolean('activa')->default(true);
+            $table->unsignedBigInteger('fk_idusuarios')->nullable();
             $table->timestamps();
 
-            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->foreign('fk_idusuarios')->references('id')->on('usuarios')->onDelete('set null');
         });
     }
 

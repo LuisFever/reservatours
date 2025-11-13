@@ -26,11 +26,5 @@ class DatabaseSeeder extends Seeder
             ['tipousu' => 'Empresa'],
             ['tipousu' => 'Cliente'],
         ]);
-
-        DB::table('planes')->insert([
-            ['nombre' => 'Gratis', 'precio' => 0, 'duracion_dias' => 30, 'limite_paquetes' => 1],
-            ['nombre' => 'Mensual', 'precio' => 50, 'duracion_dias' => 30, 'limite_paquetes' => null],
-            ['nombre' => 'Anual', 'precio' => 500, 'duracion_dias' => 365, 'limite_paquetes' => null],
-        ]);
     }
 }

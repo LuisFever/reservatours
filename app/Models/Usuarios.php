@@ -36,12 +36,23 @@ class Usuarios extends Authenticatable
 
     public function suscripcion()
     {
-        return $this->hasOne(Suscripcion::class, 'usuario_id');
+        return $this->hasOne(Suscripcion::class, 'fk_idusuarios');
     }
 
 
-    // public function suscripcionActiva()
-    // {
-    //     return $this->hasOne(Suscripcion::class, 'usuario_id')->where('activa', true)->latestOfMany();
-    // }
+    public function getDisplayNameAttribute()
+    {
+        if ($this->tipousuarios && strtolower($this->tipousuarios->tipousu) === 'nameempresa') {
+            return $this->empresas?->nombre_empresa ?? 'Empresa sin nombre';
+        }
+        return $this->personas ? $this->personas->nombres . ' ' . $this->personas->apellidos : $this->name;
+    }
+
+    public function getDisplayLogoAttribute()
+    {
+        if ($this->tipousuarios && strtolower($this->tipousuarios->tipousu) === 'nameempresa') {
+            return $this->empresas?->logo_url; // asegúrate de tener esta columna en empresas
+        }
+        return $this->profile_photo_url;
+    }
 }

@@ -10,4 +10,5 @@ class Login extends Component
     {
         return view('livewire.auth.login')->layout('layouts.app'); // o layouts.auth si quieres uno exclusivo
     }
+    
 }
