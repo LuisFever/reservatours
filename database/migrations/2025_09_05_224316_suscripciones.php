@@ -6,21 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('suscripciones', function (Blueprint $table) {
             $table->id();
-            $table->enum('plan', ['gratis', 'mensual', 'anual']);
-            $table->date('fecha_inicio')->default(now());
-            $table->date('fecha_fin')->nullable();
-            $table->boolean('activa')->default(true);
-            $table->unsignedBigInteger('fk_idusuarios')->nullable();
+            $table->unsignedBigInteger('fk_idusuarios');
+            $table->foreign('fk_idusuarios')->references('id')->on('users')->onDelete('cascade');
+            $table->string('tipo_suscripcion');
+            $table->date('fecha_inicio');
+            $table->date('fecha_fin');
+            $table->boolean('estado')->default(1);
             $table->timestamps();
-
-            $table->foreign('fk_idusuarios')->references('id')->on('usuarios')->onDelete('set null');
         });
     }
 

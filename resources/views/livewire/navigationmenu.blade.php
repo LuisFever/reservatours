@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-gradient-to-r from-gray-800 via-emerald-600 to-emerald-500 shadow-lg">
+<nav x-data="{ open: false }" class="bg-gradient-to-r from-emerald-500 via-emerald-600 to-gray-700 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
@@ -10,66 +10,12 @@
                 <div class="flex-shrink-0 items-center">
                     <a href="{{ route('inicio') }}"
                         class="text-2xl font-extrabold tracking-wide hover:text-white text-2xl font-bold">
-                        <span class="text-primary">Reserv</span><span class="text-yellow-100">Áncash</span>
+                        <span class="text-white">Dashboard General</span><span class="text-yellow-100"> </span>
                     </a>
                 </div>
 
                 <div class=" space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if ($userType == 'cliente')
-                        {{-- Menú para Cliente --}}
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('dashboard.cliente')">
-                            {{ __('Mi Dashboard') }}
-                        </x-nav-link>
-
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('destinos')">
-                            {{ __('Destinos') }}
-                        </x-nav-link>
-
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('servicios')">
-                            {{ __('Servicios') }}
-                        </x-nav-link>
-
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('reservas.mis_reservas')">
-                            {{ __('Mis Reservas') }}
-                        </x-nav-link>
-
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('empresas')">
-                            {{ __('Empresas') }}
-                        </x-nav-link>
-                    @elseif ($userType == 'empresa')
-                        {{-- Menú para Empresa --}}
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('dashboard.empresa')">
-                            {{ __('Mi Dashboard') }}
-                        </x-nav-link>
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('servicios.mis_servicios')">
-                            {{ __('Mis Servicios') }}
-                        </x-nav-link>
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('equipos.mis_equipos')">
-                            {{ __('Mis Equipos') }}
-                        </x-nav-link>
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('reservas.empresa')">
-                            {{ __('Reservas') }}
-                        </x-nav-link>
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('paquetes')">
-                            {{ __('Paquetes') }}
-                        </x-nav-link>
-                    @else
-                        {{-- Menú por defecto (sin autenticar) --}}
-                        <x-nav-link class="text-white font-bold text-lg" href="{{ route('dashboard') }}"
-                            :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    @endif
+                    
                 </div>
             </div>
 
@@ -142,7 +88,7 @@
                                     @endif
 
                                     {{-- Nombre --}}
-                                    <span class="ml-2 text-gray-700 font-semibold truncate max-w-[150px]">
+                                    <span class="ml-2 text-white font-semibold truncate max-w-[150px]">
                                         {{ Auth::user()->display_name }}
                                     </span>
                                 </button>
@@ -150,7 +96,8 @@
 
                             <x-slot name="content">
                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                    {{ __('Manage Account') }}
+                                    {{ __('Administrar cuenta
+') }}
                                     @if ($userType)
                                         <div class="text-blue-600 font-semibold">{{ ucfirst($userType) }}</div>
                                     @endif
@@ -158,7 +105,7 @@
 
                                 <x-dropdown-link href="{{ route('dashboard') }}">
                                     <i class="fa-solid fa-id-card mr-2 text-gray-500"></i>
-                                    {{ __('Profile') }}
+                                    {{ __('Perfil') }}
                                 </x-dropdown-link>
 
                                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -173,7 +120,7 @@
                                     @csrf
                                     <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
                                         <i class="fa-solid fa-right-from-bracket mr-2 text-red-500"></i>
-                                        {{ __('Log Out') }}
+                                        {{ __('Cerrar Sesión') }}
                                     </x-dropdown-link>
                                 </form>
                             </x-slot>
@@ -212,46 +159,7 @@
 
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            @if ($userType == 'cliente')
-                {{-- Menú móvil para Cliente --}}
-                <x-responsive-nav-link href="{{ route('dashboard.cliente') }}" :active="request()->routeIs('dashboard.cliente')">
-                    {{ __('Mi Dashboard') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('destinos')">
-                    {{ __('Destinos') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('servicios')">
-                    {{ __('Servicios') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('reservas.mis_reservas')">
-                    {{ __('Mis Reservas') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('empresas')">
-                    {{ __('Empresas') }}
-                </x-responsive-nav-link>
-            @elseif ($userType == 'empresa')
-                {{-- Menú móvil para Empresa --}}
-                <x-responsive-nav-link href="{{ route('dashboard.empresa') }}" :active="request()->routeIs('dashboard.empresa')">
-                    {{ __('Mi Dashboard') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('servicios.mis_servicios')">
-                    {{ __('Mis Servicios') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('equipos.mis_equipos')">
-                    {{ __('Mis Equipos') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('reservas.empresa')">
-                    {{ __('Reservas') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('paquetes')">
-                    {{ __('Paquetes') }}
-                </x-responsive-nav-link>
-            @else
-                {{-- Menú móvil por defecto --}}
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
-            @endif
+            
         </div>
 
         @auth

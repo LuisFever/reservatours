@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('ruc')->unique();
             $table->string('direccion')->nullable();
             $table->string('telefono')->nullable();
-            $table->string('logo')->nullable();
+            // $table->string('logo')->nullable();
             $table->timestamps();
         });
     }

@@ -17,9 +17,16 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->foreignId('fk_idpersonas')->nullable();
+            $table->foreignId('fk_idtipousuarios')->nullable();
+            $table->rememberToken();
+            $table->integer('intentos_fallidos')->default(0);
+            $table->timestamp('bloqueado_hasta')->nullable();
+            $table->boolean('estado_usu')->default(1);
+            $table->timestamp('ultimo_acceso')->nullable();
+            $table->foreignId('current_team_id')->nullable();
+            
             $table->timestamps();
         });
 

@@ -39,7 +39,7 @@
                     <!-- Logo -->
                     <div class="flex-shrink-0 flex items-center">
                         <a href="/" class="text-2xl font-bold hover:text-yellow-500">
-                            <span class="text-primary">Reserv</span><span class="text-pearl-100">Áncash</span>
+                            <span class="text-black">Reserv</span><span class="text-yellow-300">Áncash</span>
                         </a>
                     </div>
 
@@ -92,6 +92,9 @@
         </nav>
 
         <!-- Mobile Sidebar Overlay -->
+        
+        <?php
+        /*
         @if ($isOpen)
             <div class="fixed inset-0 z-50 lg:hidden">
                 <!-- Backdrop -->
@@ -156,6 +159,8 @@
                 </div>
             </div>
         @endif
-
+        */
+        ?>
+        
     </div>
 </div>

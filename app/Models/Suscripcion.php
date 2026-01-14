@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Suscripcion extends Model
 {
@@ -11,22 +12,45 @@ class Suscripcion extends Model
 
     protected $table = 'suscripciones';
 
+    // Usar los nombres reales de columnas en la BD
     protected $fillable = [
-        'plan',
+        'tipo_suscripcion',
         'fecha_inicio',
         'fecha_fin',
-        'activa',
-        'fk_idusuarios'
+        'estado',
+        'fk_idusuarios',
     ];
-    // 👇 Esto convierte automáticamente fecha_inicio y fecha_fin en Carbon
+
+    // Convertir fechas y estado
     protected $casts = [
         'fecha_inicio' => 'datetime',
         'fecha_fin' => 'datetime',
-        'activa' => 'boolean',
+        'estado' => 'boolean',
     ];
 
-    public function usuario()
+    // Accesores / mutators opcionales para mantener compatibilidad con código
+    public function getPlanAttribute()
     {
-        return $this->belongsTo(Usuarios::class, 'fk_idusuarios');
+        return $this->attributes['tipo_suscripcion'] ?? null;
+    }
+
+    public function setPlanAttribute($value)
+    {
+        $this->attributes['tipo_suscripcion'] = $value;
+    }
+
+    public function getActivaAttribute()
+    {
+        return isset($this->attributes['estado']) ? (bool) $this->attributes['estado'] : null;
+    }
+
+    public function setActivaAttribute($value)
+    {
+        $this->attributes['estado'] = (bool) $value;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'fk_idusuarios');
     }
 }

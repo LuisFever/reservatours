@@ -65,7 +65,7 @@
 
                 {{-- PANEL IZQUIERDO --}}
                 <div class="md:w-1/2 to-emerald-600 text-white p-8 md:p-12 flex flex-col justify-center relative overflow-hidden"
-                    style="background: linear-gradient(to bottom right, #06D6A0, var(--tw-gradient-to));">
+                    style="background: linear-gradient(to bottom right, #10b77f, var(--tw-gradient-to));">
                     <div class="absolute top-[-50px] right-[-50px] w-48 h-48 rounded-full bg-white bg-opacity-10"></div>
                     <div class="absolute bottom-[-80px] left-[-80px] w-64 h-64 rounded-full bg-white bg-opacity-5">
                     </div>
@@ -303,14 +303,14 @@
                                         </div>
                                         <div class="mb-4 md:mb-0">
                                             <label class="block text-gray-700 text-sm font-medium mb-1"
-                                                for="logo_empresa">Logo de la Empresa</label>
+                                                for="profile_photo_path">Logo de la Empresa</label>
                                             <div class="relative w-full">
                                                 <input type="file"
                                                     class="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
-                                                    id="logo_empresa" name="logo_empresa" accept="image/*">
+                                                    id="profile_photo_path" name="profile_photo_path" accept="image/*">
                                                 <label
                                                     class="flex items-center justify-center px-4 py-2 bg-white border border-dashed border-gray-300 rounded-md text-gray-500 text-sm transition-all duration-300 hover:border-yellow-500 hover:text-yellow-500"
-                                                    for="logo_empresa" wire:model="logo_empresa">
+                                                    for="profile_photo_path" wire:model="">
                                                     <i class="fas fa-cloud-upload-alt mr-2 text-xs"></i> Subir Logo
                                                 </label>
                                             </div>

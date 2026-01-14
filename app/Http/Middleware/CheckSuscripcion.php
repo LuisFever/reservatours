@@ -39,7 +39,12 @@ class CheckSuscripcion
                 $suscripcion->update(['activa' => false]);
 
                 // Guardamos un mensaje temporal
-                session()->flash('warning', "Tu suscripción ha expirado.\n Elige un plan mensual o anual para continuar disfrutando de todas las funcionalidades.");
+                session()->flash('warning', "Tu suscripción ha expirado. Elige un plan mensual o anual para continuar disfrutiendo de todas las funcionalidades.");
+
+                // Si no estamos ya en la ruta de selección de plan, redirigimos al panel de suscripción.
+                if (! $request->routeIs('suscripcion.plan')) {
+                    return redirect()->route('suscripcion.plan');
+                }
             }
         }
 

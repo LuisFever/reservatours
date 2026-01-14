@@ -29,6 +29,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo_path',
+        'fk_idpersonas',
+        'fk_idtipousuarios',
+        'intentos_fallidos',
+        'bloqueado_hasta',
+        'estado_usu',
+        'ultimo_acceso'
     ];
 
     /**
@@ -61,7 +68,44 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'bloqueado_hasta' => 'datetime',
+            'ultimo_acceso' => 'datetime',
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Define la relación con el modelo TipoUsuario.
+     * Un usuario pertenece a un tipo de usuario.
+     */
+    public function tipousuarios()
+    {
+        return $this->belongsTo(TipoUsuarios::class, 'fk_idtipousuarios');
+    }
+    public function personas()
+    {
+        return $this->belongsTo(Personas::class, 'fk_idpersonas');
+    }
+
+    public function suscripcion()
+    {
+        return $this->hasOne(Suscripcion::class, 'fk_idusuarios');
+    }
+
+    public function getDisplayNameAttribute()
+    {
+        if ($this->tipousuarios && strtolower($this->tipousuarios->tipousu) === 'nameempresa') {
+            return $this->empresas?->nombre_empresa ?? 'Empresa sin nombre';
+        }
+        return $this->personas ? $this->personas->nombres . ' ' . $this->personas->apellidos : $this->name;
+    }
+
+    public function getDisplayLogoAttribute()
+    {
+        if ($this->tipousuarios && strtolower($this->tipousuarios->tipousu) === 'nameempresa') {
+            return $this->empresas?->logo_url; // asegúrate de tener esta columna en empresas
+        }
+        return $this->profile_photo_url;
+    }   
+
 }

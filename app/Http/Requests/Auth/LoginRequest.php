@@ -22,7 +22,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email', 'exists:usuarios,email'], // Verifica que el email exista en la tabla usuarios
+            'email' => ['required', 'string', 'email', 'exists:users,email'], // Verifica que el email exista en la tabla users
             'password' => ['required', 'string', 'min:6'],
         ];
     }

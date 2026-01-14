@@ -6,7 +6,7 @@ use App\Models\Empresas;
 use App\Models\Personas;
 use App\Models\Reprelegal;
 use App\Models\TipoUsuarios;
-use App\Models\Usuarios;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
@@ -14,6 +14,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class Register extends Component
 {
@@ -23,16 +24,8 @@ class Register extends Component
 
     public string $userType = 'client';
     public $document_type = 'dni';
-    public $dni;
-    public $nombres;
-    public $apellidos;
-    public $telefono;
-    public $nameempresa;
-    public $ruc;
-    public $razonsocial;
-    public $direccion;
-    public $telefono_empresa;
-    public $logo_empresa;
+    public $dni, $nombres, $apellidos, $telefono;
+    public $nameempresa, $ruc, $razonsocial, $direccion, $telefono_empresa;
 
     public $dni_reprelegal;
     public $nombres_reprelegal;
@@ -40,13 +33,16 @@ class Register extends Component
 
     public $email;
     public $password;
+    public $photo = null;
     public $password_confirmation;
+    public $estadousuario = '1';
+    public $name;
 
     public function setUserType(string $type): void
     {
         $this->userType = $type;
         $this->resetValidation();
-        $this->reset(['dni', 'dni', 'nombres', 'apellidos', 'telefono', 'nameempresa', 'ruc', 'razonsocial', 'direccion', 'telefono_empresa', 'logo_empresa', 'dni_reprelegal', 'nombres_reprelegal', 'apellidos_reprelegal']);
+        $this->reset(['dni', 'dni', 'nombres', 'apellidos', 'telefono', 'nameempresa', 'ruc', 'razonsocial', 'direccion', 'telefono_empresa']);
     }
 
     public function render()
@@ -109,7 +105,7 @@ class Register extends Component
         try {
             // Validación base
             $rules = [
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:usuarios,email'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ];
 
@@ -128,10 +124,11 @@ class Register extends Component
                     'razonsocial' => ['required', 'string', 'max:255'],
                     'direccion' => ['nullable', 'string'],
                     'telefono_empresa' => ['nullable', 'string'],
-                    'logo_empresa' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+                    'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
                     'dni' => ['required', 'string', 'max:8', 'unique:personas,dni'],
                     'nombres' => ['required', 'string', 'max:255'],
                     'apellidos' => ['required', 'string', 'max:255'],
+                    'telefono' => ['nullable', 'string', 'max:9'],
                 ]);
             }
 
@@ -147,20 +144,24 @@ class Register extends Component
                     'apellidos' => $this->apellidos,
                     'celular' => $this->telefono,
                 ]);
-                \Log::info('Persona cliente creada con ID: ' . $persona->id);
 
+                \Log::info('Persona cliente creada con ID: ' . $persona->id);
                 // Crear usuario con rol cliente
                 $rol = 'Cliente';
                 $tipoUsuario = TipoUsuarios::firstOrCreate(['tipousu' => $rol], ['tipousu' => $rol]);
                 \Log::info("Rol '{$rol}' id = {$tipoUsuario->id}");
 
-                $this->createUser($this->email, $this->password, $persona->id, null, $tipoUsuario->id);
+                $this->createUser($this->nombres.''.$this->apellidos, $this->email, $this->password, $this->photo, $persona->id, $tipoUsuario->id, $this->estadousuario);
                 \Log::info('Usuario cliente creado con email: ' . $this->email);
-                
-            } elseif ($this->userType === 'company') {
-                // Guardar logo (si existe)
-                $logoPath = $this->logo_empresa ? $this->logo_empresa->store('logos', 'public') : null;
 
+            } elseif ($this->userType === 'company') {
+                // Crear persona representante legal
+                $persona = Personas::create([
+                    'dni' => $this->dni,
+                    'nombres' => $this->nombres,
+                    'apellidos' => $this->apellidos,
+                    'celular' => $this->telefono_empresa, // Usar el teléfono del representante
+                ]);
                 // Crear empresa
                 $empresa = Empresas::create([
                     'nameempresa' => $this->nameempresa,
@@ -168,38 +169,37 @@ class Register extends Component
                     'ruc' => $this->ruc,
                     'direccion' => $this->direccion,
                     'telefono' => $this->telefono_empresa,
-                    'logo' => $logoPath,
                 ]);
                 \Log::info('Empresa creada con ID: ' . $empresa->id);
-
-                // Crear representante legal
-                $persona_repre = Personas::create([
-                    'dni' => $this->dni,
-                    'nombres' => $this->nombres,
-                    'apellidos' => $this->apellidos,
-                ]);
-                \Log::info('Persona representante legal creada con ID: ' . $persona_repre->id);
-
                 // Relación representante legal
-                Reprelegal::create([
+                $repre_legal = Reprelegal::create([
                     'fecha' => now(),
                     'fk_idempresas' => $empresa->id,
-                    'fk_idpersonas' => $persona_repre->id,
+                    'fk_idpersonas' => $persona->id,
                 ]);
+                \Log::info('Persona representante legal creada con ID: ' . $repre_legal->id);
 
                 // Crear usuario con rol empresa
-                $tipoUsuario = TipoUsuarios::where('tipousu', 'empresa')->first();
-                $this->createUser($this->email, $this->password, $persona_repre->id, $empresa->id, $tipoUsuario->id);
+                $rol = 'Empresa';
+                $tipoUsuario = TipoUsuarios::firstOrCreate(['tipousu' => $rol], ['tipousu' => $rol]);
+
+                $this->createUser($this->nameempresa, $this->email, $this->password, $this->photo, $persona->id, $tipoUsuario->id, $this->estadousuario);
+                \Log::info('Usuario empresa creado con email: ' . $this->email);
             }
 
             // Intentar login automático
             if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
                 session()->regenerate();
-                return redirect()->intended('/login')->with('success', '¡Registro completado exitosamente!');
+                return redirect()->intended('/dashboard')->with('success', '¡Registro completado exitosamente!');
             }
 
             session()->flash('error', 'Error al iniciar sesión automáticamente. Por favor, inicia sesión manualmente.');
             return redirect()->route('login');
+        } catch (ValidationException $e) {
+            \Log::error('❌ Error de validación en register(): ' . $e->getMessage(), [
+                'errors' => $e->errors()
+            ]);
+            throw $e; // Relanzar para que Livewire muestre los errores en la vista
         } catch (\Throwable $e) {
             \Log::error('❌ Error en register(): ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
@@ -209,14 +209,16 @@ class Register extends Component
     }
 
     // Crear usuario en la tabla usuarios
-    protected function createUser($email, $password, $personaId = null, $empresaId = null, $tipoUsuarioId = null)
+    protected function createUser($name, $email, $password, $phtoto, $personaId = null, $tipoUsuarioId = null, $estadousuario)
     {
-        return Usuarios::create([
+        return User::create([
+            'name' => $name,
             'email' => $email,
-            'password' => Hash::make($password),
+            'password' => bcrypt($password),
+            'profile_photo_path' => $phtoto,
             'fk_idpersonas' => $personaId,
-            'fk_idempresas' => $empresaId,
             'fk_idtipousuarios' => $tipoUsuarioId,
+            'estado_usu' => $estadousuario,
         ]);
     }
 }

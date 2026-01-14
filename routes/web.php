@@ -6,12 +6,17 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\SuscripcionPlan;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Livewire\Dashboard;
+use App\Livewire\admin\VistaUsuarios;
 
-// Página de inicio
+
+// Página de inicio - Los $slot cargan aqui primero por el '/'
 Route::get('/', Inicio::class)->name('inicio');
 
 // Login y Registro (Livewire)
 Route::get('/login', Login::class)->name('login');
+Route::post('/login', [LoginController::class, 'store']);
 Route::get('/register', Register::class)->name('register');
 
 // Email verification
@@ -24,34 +29,17 @@ Route::middleware(['auth'])->get('/suscripcion', SuscripcionPlan::class)->name('
 // Grupo de rutas protegidas por auth
 Route::middleware(['auth', 'suscripcion'])->group(function () {
 
-    // Ruta genérica /dashboard que redirige según el tipo
-    Route::get('/dashboard', function () {
-        $user = auth()->user();
-        // intenta obtener tipo desde relación tipousuarios (o desde session si la tienes)
-        $tipo = $user->tipoUsuario?->tipousu ?? session('user_type') ?? null;
-        $tipoLower = is_string($tipo) ? strtolower($tipo) : null;
+    // Ruta genérica /dashboard: usar directamente el componente Livewire
+    // (Se usa el componente Livewire `Dashboard` más abajo)
 
-        return match ($tipoLower) {
-            'empresa' => redirect()->route('dashboard.empresa'),
-            'cliente' => redirect()->route('dashboard.cliente'),
-            default => view('dashboard') // fallback si no hay tipo
-        };
-    })->name('dashboard');
+    // Rutas específicas por tipo de dashboard (cliente/empresa) fueron removidas
+    // Se usa la ruta genérica '/dashboard' que carga el componente Livewire `Dashboard`
 
-    // Dashboard cliente
-    Route::get('/dashboard/cliente', function () {
-        // la vista dashboard.cliente debe contener/extend tu layout y mostrar contenido del cliente
-        return view('dashboard.cliente');
-    })->name('dashboard.cliente');
+    //Para el dashboard de usuario
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-    // Dashboard empresa
-    Route::get('/dashboard/empresa', function () {
-        return view('dashboard.empresa');
-    })->name('dashboard.empresa');
+    Route::get('/admin/vistausuarios', VistaUsuarios::class)->name('admin.vistausuarios');
 
-    // Panel extra de empresa (ejemplo)
-    Route::get('/empresa/panel', function () {
-        return view('empresa.panel');
-    })->name('empresa.panel');
+
 
 });
